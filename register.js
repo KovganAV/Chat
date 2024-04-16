@@ -1,12 +1,15 @@
 const express = require('express');
 const CryptoJS = require('crypto-js');
 const router = express.Router();
-const User = require('../webchat-frontend/src/api/request.ts').User; 
-//const { User } = require('../webchat-frontend/src/api/request.js');  // Adjust the path accordingly
+const User = require('./webchat-frontend/src/api/request').User; 
 
 function sha256(str) {
     return CryptoJS.SHA256(str).toString();
 }
+
+function generateUserId() {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  }
 
 router.post('/register', async (req, res) => { 
     const { username, Password, password_confirmation } = req.body.user;
@@ -20,7 +23,8 @@ router.post('/register', async (req, res) => {
 
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists' });
-        }
+        } 
+        const userId = generateUserId();
         const newUser = new User({ username, Password: sha256(Password) });
         await newUser.save();
 

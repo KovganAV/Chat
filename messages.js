@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Message = require('../server/message');
+const Message = require('../webchat-frontend/src/api/message');
 
 router.post('/', async (req, res) => {
   const { user_id, content } = req.body;
